@@ -2,3 +2,5 @@ currency-converter
 .env
 
 _output
+
+*.out
