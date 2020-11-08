@@ -28,19 +28,20 @@ func main() {
 		panic(err)
 	}
 
-	currencyHandler := currencyconverter.NewCurrencyHandler()
+	currencyFlow := currencyconverter.NewCurrencyFlow()
+	currencyHandler := currencyconverter.NewCurrencyHandler(&currencyFlow)
 
 	router := httprouter.New()
 	router.GET("/currencies", decorate(currencyHandler.GetCurrencies))
 	router.POST("/currencies", decorate(currencyHandler.CreateCurrency))
 	router.POST("/currencies/rates", decorate(currencyHandler.CreateNewConversionRate))
-	router.POST("/convert", decorate(currencyHandler.CreateCurrency))
+	router.POST("/convert", decorate(currencyHandler.ConvertCurrency))
 
 	s := &http.Server{
 		Addr:         fmt.Sprintf(":%s", cfg.Port),
 		Handler:      router,
-		ReadTimeout:  300 * time.Second,
-		WriteTimeout: 300 * time.Second,
+		ReadTimeout:  30 * time.Second,
+		WriteTimeout: 30 * time.Second,
 	}
 
 	log.Printf("Server available at %s\n", s.Addr)

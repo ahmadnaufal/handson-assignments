@@ -7,18 +7,21 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-type CurrencyHandler struct{}
+type CurrencyHandler struct {
+	flow CurrencyFlow
+}
 
-func NewCurrencyHandler() CurrencyHandler {
-	return CurrencyHandler{}
+func NewCurrencyHandler(currencyFlow CurrencyFlow) CurrencyHandler {
+	return CurrencyHandler{
+		flow: currencyFlow,
+	}
 }
 
 func (h *CurrencyHandler) GetCurrencies(w http.ResponseWriter, r *http.Request, _ httprouter.Params) error {
-	currencies := []Currency{
-		{
-			ID:   1,
-			Name: "JPY",
-		},
+	ctx := r.Context()
+	currencies, err := h.flow.GetCurrencies(ctx)
+	if err != nil {
+		return Error(w, err)
 	}
 
 	return OK(w, currencies)
@@ -27,6 +30,11 @@ func (h *CurrencyHandler) GetCurrencies(w http.ResponseWriter, r *http.Request, 
 func (h *CurrencyHandler) CreateCurrency(w http.ResponseWriter, r *http.Request, _ httprouter.Params) error {
 	var currency Currency
 	if err := json.NewDecoder(r.Body).Decode(&currency); err != nil {
+		return Error(w, err)
+	}
+
+	ctx := r.Context()
+	if err := h.flow.CreateCurrency(ctx, &currency); err != nil {
 		return Error(w, err)
 	}
 
@@ -39,6 +47,11 @@ func (h *CurrencyHandler) CreateNewConversionRate(w http.ResponseWriter, r *http
 		return Error(w, err)
 	}
 
+	ctx := r.Context()
+	if err := h.flow.CreateConversionRate(ctx, &crate); err != nil {
+		return Error(w, err)
+	}
+
 	return Created(w, crate)
 }
 
@@ -47,6 +60,14 @@ func (h *CurrencyHandler) ConvertCurrency(w http.ResponseWriter, r *http.Request
 	if err := json.NewDecoder(r.Body).Decode(&cparam); err != nil {
 		return Error(w, err)
 	}
+
+	ctx := r.Context()
+	convertedAmount, err := h.flow.ConvertCurrency(ctx, cparam)
+	if err != nil {
+		return Error(w, err)
+	}
+
+	cparam.ConvertedAmount = convertedAmount
 
 	return Created(w, cparam)
 }
