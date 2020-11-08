@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+
+  currency-converter:
+    image: rentuffdocker/currency-converter
+    build: .
+    environment:
+      - APP_PORT=${APP_PORT}
+    ports:
+      - "8080:${APP_PORT}"
+
+  postgres:
+    image: postgres:12.1
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
