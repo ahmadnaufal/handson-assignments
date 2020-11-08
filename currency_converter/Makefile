@@ -14,7 +14,7 @@ export GO111MODULE ?= on
 all: compile test
 
 test:
-	go test ./...
+	go test -cover ./...
 
 coverage:
 	go tool cover -html=cover.out -o cover.html

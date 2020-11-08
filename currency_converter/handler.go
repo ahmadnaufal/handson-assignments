@@ -41,3 +41,12 @@ func (h *CurrencyHandler) CreateNewConversionRate(w http.ResponseWriter, r *http
 
 	return Created(w, crate)
 }
+
+func (h *CurrencyHandler) ConvertCurrency(w http.ResponseWriter, r *http.Request, _ httprouter.Params) error {
+	var cparam ConversionParam
+	if err := json.NewDecoder(r.Body).Decode(&cparam); err != nil {
+		return Error(w, err)
+	}
+
+	return Created(w, cparam)
+}

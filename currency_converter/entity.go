@@ -14,3 +14,10 @@ type ConversionRate struct {
 	CurrencyIDTo   int64   `json:"currency_id_to"`
 	Rate           float64 `json:"rate"`
 }
+
+type ConversionParam struct {
+	CurrencyIDFrom  int64   `json:"currency_id_from"`
+	CurrencyIDTo    int64   `json:"currency_id_to"`
+	BaseAmount      float64 `json:"base_amount"`
+	ConvertedAmount float64 `json:"converted_amount"`
+}

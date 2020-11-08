@@ -34,6 +34,7 @@ func main() {
 	router.GET("/currencies", decorate(currencyHandler.GetCurrencies))
 	router.POST("/currencies", decorate(currencyHandler.CreateCurrency))
 	router.POST("/currencies/rates", decorate(currencyHandler.CreateNewConversionRate))
+	router.POST("/convert", decorate(currencyHandler.CreateCurrency))
 
 	s := &http.Server{
 		Addr:         fmt.Sprintf(":%s", cfg.Port),
