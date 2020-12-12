@@ -6,3 +6,4 @@ A comprehensive list of assignments. Projects to come up:
 - Marketplace - Store Service
 - Soldier-Magazine Problem
 - Concurrency Problem: Stock Management
+- Proximity Server (similar to Google Location Services)
