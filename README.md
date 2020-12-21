@@ -7,3 +7,4 @@ A comprehensive list of assignments. Projects to come up:
 - Soldier-Magazine Problem
 - Concurrency Problem: Stock Management
 - Proximity Server (similar to Google Location Services)
+- Sentiment Analysis with Flask
